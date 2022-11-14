@@ -1,8 +1,5 @@
 const path = require('path')
 
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
 module.exports = {
   development: {
     client: 'sqlite3',
