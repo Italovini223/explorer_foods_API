@@ -1,13 +1,16 @@
+require('express-async-errors');
+
 const database = require('./database/sqlite');
 
-require('express-async-errors');
 const express = require('express');
 
 
 const AppError = require('./utils/appError')
+const routes = require('./routes')
 
 const app = express();
 app.use(express.json());
+app.use(routes);
 
 database();
 
