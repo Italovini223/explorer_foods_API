@@ -3,13 +3,14 @@ const appError = require('../utils/appError');
 
 class DishControllers {
   async create(request, response){
-    const {name, description, price, ingredients} = request.body
+    const {name, description, price, ingredients, category} = request.body
 
     const integerPrice = price * 100;
 
     const dish_id = await knex("dish").insert({
       name,
       description,
+      category,
       price: integerPrice
     });
 
