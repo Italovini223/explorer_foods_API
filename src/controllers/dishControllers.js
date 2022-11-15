@@ -26,7 +26,12 @@ class DishControllers {
       message: "Prato criado com sucesso!"
     })
   }
-  
+
+  async index(request, response){
+    const dish = await knex("dish")
+
+    response.json(dish);
+  }
 }
 
 module.exports = DishControllers
