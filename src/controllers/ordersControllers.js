@@ -1,3 +1,4 @@
+const { response } = require('express');
 const knex = require('../database/knex');
 const appError= require('../utils/appError');
 class OrderRoutes {
@@ -27,6 +28,67 @@ class OrderRoutes {
       message: `Pedido efetuado com sucesso. Numero do pedido = ${order_id}`
    });
   }
+
+  async index(request, response){
+    const {user_id} = request.params;
+
+    let orders;
+
+    const user = await knex("users").where({id: user_id}).first();
+
+    if(user.isAdmin !== 1){
+      orders = await knex("orderDishes").where({user_id})
+      .select([
+        "orders.id",
+        "orders.user_id",
+        "orders.status",
+        "orders.total",
+        "orders.payMethod",
+        "orders.crated_at"
+      ])
+      .innerJoin("orders", "orders.id", "orderDishes.order_id")
+      .groupBy("orders.id")
+
+      const orderDishes = await knex("orderDishes")
+      const ordersWithDishes = orders.map(order => {
+        const orderDish = orderDishes.filter(dish => dish.order_id === order.id);
+
+        return {
+          ...order,
+          dishes: orderDish
+        }
+      })
+
+      return response.json(ordersWithDishes);
+
+    } else {
+      orders =  await knex("orderDishes")
+      .select([
+        "orders.id",
+        "orders.user_id",
+        "orders.status",
+        "orders.total",
+        "orders.payMethod",
+        "orders.crated_at"
+      ])
+      .innerJoin("orders", "orders.id", "orderDishes.order_id")
+      .groupBy("orders.id")
+
+      const orderDishes = await knex("orderDishes")
+      const orderWithDishes = orders.map(order => {
+        const orderDish = orderDishes.filter(dish => dish.order_id === order.id);
+
+        return {
+          ...order,
+          itens: orderDish
+        }
+      })
+      
+      return response.json(orderWithDishes)
+    }
+
+  }
+
 }
 
 module.exports = OrderRoutes;
