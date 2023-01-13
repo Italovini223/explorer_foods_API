@@ -89,6 +89,23 @@ class OrderRoutes {
 
   }
 
+  async update(request, response){
+    const {id, status} = request.body;
+    const {user_id} = request.params;
+
+    const user = await knex("users").where({id: user_id}).first();
+
+    if(user.isAdmin !== 1){
+      throw new appError("somente administradores podem atualizar os pedidos", 401);
+    }
+
+    await knex("orders").update({status}).where({id});
+
+    return response.json({
+      message: "Status do pedido atualizado com sucesso!"
+    });
+  }
+
 }
 
 module.exports = OrderRoutes;
