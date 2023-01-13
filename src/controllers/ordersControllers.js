@@ -3,22 +3,29 @@ const appError= require('../utils/appError');
 class OrderRoutes {
   async create(request, response){
     const {user_id} = request.params;
-    const {dishId, quantity}= request.query;
+   const {total, payMethod, status, cart} = request.body;
 
-    const filteredDishes = dishId.split(',').map(dish => dish.trim());
-    const filteredQuantity = quantity.split(',').map(quantity => quantity.trim())
+   const order_id = await knex("orders").insert({
+    status,
+    payMethod,
+    total,
+    user_id
+   });
 
-    console.log(filteredDishes)
+   const dishesInCart = cart.map(dish => {
+    return {
+      title: dish.name,
+      quantity: dish.quantity,
+      dish_id: dish.id,
+      order_id
+    }
+   });
 
-    const dish = await knex('dish')
-    .select([
-      "dish.price",
-      "dish.id"
-    ])
-    .whereIn("id", filteredDishes)
-    
+   await knex("orderDishes").insert(dishesInCart);
 
-    return response.json({dish, filteredQuantity})
+   return response.status(201).json({
+      message: `Pedido efetuado com sucesso. Numero do pedido = ${order_id}`
+   });
   }
 }
 
