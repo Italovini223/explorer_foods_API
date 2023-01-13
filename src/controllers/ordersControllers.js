@@ -3,7 +3,7 @@ const knex = require('../database/knex');
 const appError= require('../utils/appError');
 class OrderRoutes {
   async create(request, response){
-    const {user_id} = request.params;
+    const user_id = request.user.id;
    const {total, payMethod, status, cart} = request.body;
 
    const order_id = await knex("orders").insert({
@@ -30,7 +30,7 @@ class OrderRoutes {
   }
 
   async index(request, response){
-    const {user_id} = request.params;
+    const user_id = request.user.id;
 
     let orders;
 
@@ -91,7 +91,7 @@ class OrderRoutes {
 
   async update(request, response){
     const {id, status} = request.body;
-    const {user_id} = request.params;
+    const user_id = request.user.id;
 
     const user = await knex("users").where({id: user_id}).first();
 
