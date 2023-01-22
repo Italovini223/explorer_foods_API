@@ -11,6 +11,7 @@ class DishControllers {
     const integerPrice = price * 100;
 
     const fileName = request.file.filename;
+
     const avatar = await diskStorage.saveFile(fileName);
 
 
@@ -32,13 +33,46 @@ class DishControllers {
 
     await knex("ingredients").insert(ingredientsInsert);
 
+    console.log(ingredients.length);
+
     return response.status(201).json({
       message: "Prato criado com sucesso!"
     })
   }
 
   async update(request, response){
-    
+    const user_id = request.user.id;
+    const {name, description, price, ingredients, category} = request.body;
+    const {dishId} = request.params;
+
+
+    const dish = await knex("dish").where({id: dishId}).first();
+    const user = await knex("users").where({id: user_id}).first();
+
+    if(user.isAdmin !== 1) {
+      throw new appError("Somente administradores podem atualizar as informações do prato", 401);
+    }
+
+    const avatarFileName = request.file.filename;
+
+    if(dish.avatar){
+      await diskStorage.deleteFile(dish.avatar);
+    }
+
+    const avatar = await diskStorage.saveFile(avatarFileName);
+
+    dish.name = name ?? dish.name;
+    dish.description = description ?? dish.description;
+    dish.price = price * 100 ?? dish.price;
+    dish.category = category ?? dish.category;
+    dish.avatar = avatar ?? dish.avatar;
+
+    await knex("dish").where({id: dishId}).update(dish);
+
+    return response.json({
+      message: "Prato atualizado com sucesso"
+    })
+
   }
 
   async index(request, response){
