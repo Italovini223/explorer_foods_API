@@ -1,5 +1,4 @@
 const knex = require('../database/knex');
-const appError = require('../utils/appError');
 const DisKStorage = require('../providers/diskStorage')
 
 const diskStorage = new DisKStorage();
@@ -41,17 +40,11 @@ class DishControllers {
   }
 
   async update(request, response){
-    const user_id = request.user.id;
     const {name, description, price, ingredients, category} = request.body;
     const {dishId} = request.params;
 
 
     const dish = await knex("dish").where({id: dishId}).first();
-    const user = await knex("users").where({id: user_id}).first();
-
-    if(user.isAdmin !== 1) {
-      throw new appError("Somente administradores podem atualizar as informações do prato", 401);
-    }
 
     const avatarFileName = request.file.filename;
 
