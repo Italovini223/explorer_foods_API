@@ -62,6 +62,16 @@ class DishControllers {
 
     await knex("dish").where({id: dishId}).update(dish);
 
+    const ingredientsInserted = ingredients.map((ingredient) => {
+      return {
+        name: ingredient,
+        dish_id: dishId,
+      }
+    })
+
+    await knex("ingredients").where({dish_id: dishId}).delete();
+    await knex("ingredients").where({dish_id: dishId}).insert(ingredientsInserted);
+
     return response.json({
       message: "Prato atualizado com sucesso"
     })
