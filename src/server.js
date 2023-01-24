@@ -1,6 +1,9 @@
 require('express-async-errors');
 require('dotenv/config');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger.json');
+
 const database = require('./database/sqlite');
 
 const express = require('express');
@@ -15,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 app.use("/files", express.static(uploadConfig.UPLOAD_FOLDER));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 
 database();

@@ -1,0 +1,188 @@
+{
+  "openapi" : "3.0.0",
+  "info": {
+    "title": "Food Explorer API Documentation",
+    "description" : "TheFood Explorer API is a api for restaurants",
+    "version": "1.0.0",
+    "contact": {
+      "email": "italovinicius2018@gmail.com"
+    }
+  },
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "JohnDoe",
+                "email": "john.doe@gmail.com",
+                "password": "123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201" : {
+            "description": "Usuário cadastrado com sucesso!"
+          },
+          "500": {
+            "description": "Este email já existe, favor cadastrar outro!"
+          }
+        }
+      }
+    },
+    "/singIn": {
+      "post": {
+        "tags": ["session"],
+        "summary": "Create a session",
+        "description": "Create a session to authorize user access the app",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "adiministrador@gmail.com",
+                "password": "admin123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Email e/ou senha incorretos!"
+          }
+        }
+      }
+    },
+    "/dish": {
+      "post": {
+        "tags": ["dish"],
+        "summary": "create a new dish",
+        "description": "route where admins can add a new dish",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "ingredients": {
+                    "type": "array"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "avatar": {
+                    "type": "file"
+                  }
+                },
+                "example": {
+                  "name": "Salada Ravanello",
+                  "description": "Rabanetes, folhas verdes e molho agridoce salpicados com gergelim",
+                  "price": 25.97,
+                  "category": "pratos principais",
+                  "ingredients": ["pão naan", "tomate", "alface", "rabanete"],
+                  "avatar": "sina-piryae-bBzjWthTqb8-unsplash 1.png"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Prato criado com sucesso!"
+          },
+          "401": {
+            "description": "somente administradores tem permissão"
+          }
+        }
+      },
+      "put": {
+        "tags": ["dish"],
+        "summary": "update a dish",
+        "description": "route where a admin can update a dish ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "ingredients": {
+                    "type": "array"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "avatar": {
+                    "type": "file"
+                  }
+                },
+                "example": {
+                  "name": "Salada Ravanello",
+                  "description": "Rabanetes, folhas verdes e molho agridoce salpicados com gergelim",
+                  "price": 25.97,
+                  "category": "pratos principais",
+                  "ingredients": ["pão naan", "tomate", "alface", "rabanete"],
+                  "avatar": "sina-piryae-bBzjWthTqb8-unsplash 1.png"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Prato atualizado com sucesso!"
+          },
+          "401": {
+            "description": "somente administradores tem permissão"
+          }
+        }
+      }
+    }
+  }
+
+}
