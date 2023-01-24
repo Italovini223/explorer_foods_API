@@ -5,12 +5,16 @@ const database = require('./database/sqlite');
 const express = require('express');
 
 
-const AppError = require('./utils/appError')
-const routes = require('./routes')
+const AppError = require('./utils/appError');
+const routes = require('./routes');
+
+const uploadConfig = require('./configs/upload');
 
 const app = express();
 app.use(express.json());
 app.use(routes);
+app.use("/files", express.static(uploadConfig.UPLOAD_FOLDER));
+
 
 database();
 
