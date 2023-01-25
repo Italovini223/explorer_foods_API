@@ -13,7 +13,7 @@ const dishControllers = new DishControllers();
 
 dishRoutes.post("/create", ensureAuthenticated, ensureUserIsAdmin ,upload.single("avatar"), dishControllers.create);
 dishRoutes.put("/update/:dishId", ensureAuthenticated, ensureUserIsAdmin ,upload.single("avatar"), dishControllers.update);
-dishRoutes.get("/", dishControllers.index);
-dishRoutes.get("/show/:id", dishControllers.show);
+dishRoutes.get("/", ensureAuthenticated, dishControllers.index);
+dishRoutes.get("/show/:id", ensureAuthenticated, dishControllers.show);
 
 module.exports = dishRoutes;
