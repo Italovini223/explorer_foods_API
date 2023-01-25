@@ -79,9 +79,7 @@ class DishControllers {
   }
 
   async index(request, response){
-    const {category} = request.body;
-
-    const dish = await knex("dish").where({category});
+    const dish = await knex("dish");
 
     response.json(dish);
   }
