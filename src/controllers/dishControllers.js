@@ -23,12 +23,24 @@ class DishControllers {
       avatar
     });
 
-    const ingredientsInsert = ingredients.map(name => {
-      return {
-        dish_id,
-        name,
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
+
+    let ingredientsInsert
+
+    if (hasOnlyOneIngredient) {
+      ingredientsInsert = {
+        name: ingredients,
+        dish_id
       }
-    })
+    
+    } else if (ingredients.length > 1) {
+        ingredientsInsert = ingredients.map(ingredient => {
+            return {
+            dish_id,
+            name : ingredient
+            }
+        });
+    }
 
     await knex("ingredients").insert(ingredientsInsert);
 
@@ -106,6 +118,22 @@ class DishControllers {
     return response.json({
       ...dish,
       ingredients
+    })
+  }
+
+  async delete(request, response){
+    const {id} = request.body;
+
+    const dish = await knex("dish").where({id}).first();
+
+    if(dish.avatar){
+      await diskStorage.deleteFile(dish.avatar);
+    }
+
+    await knex("dish").where({id}).delete();
+
+    return response.json({
+      message: "Prato deletado com sucesso"
     })
   }
 }

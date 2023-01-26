@@ -15,5 +15,6 @@ dishRoutes.post("/create", ensureAuthenticated, ensureUserIsAdmin ,upload.single
 dishRoutes.put("/update/:dishId", ensureAuthenticated, ensureUserIsAdmin ,upload.single("avatar"), dishControllers.update);
 dishRoutes.get("/", ensureAuthenticated, dishControllers.index);
 dishRoutes.get("/show/:id", ensureAuthenticated, dishControllers.show);
+dishRoutes.delete("/delete/:id", ensureAuthenticated, ensureUserIsAdmin, dishControllers.delete);
 
 module.exports = dishRoutes;
