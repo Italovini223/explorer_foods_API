@@ -62,15 +62,28 @@ class DishControllers {
 
     await knex("dish").where({id: dishId}).update(dish);
 
-    const ingredientsInserted = ingredients.map((ingredient) => {
-      return {
-        name: ingredient,
-        dish_id: dishId,
-      }
-    })
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
-    await knex("ingredients").where({dish_id: dishId}).delete();
-    await knex("ingredients").where({dish_id: dishId}).insert(ingredientsInserted);
+    let ingredientsInsert
+
+    if (hasOnlyOneIngredient) {
+      ingredientsInsert = {
+        name: ingredients,
+        dish_id: dish.id,
+      }
+    
+    } else if (ingredients.length > 1) {
+        ingredientsInsert = ingredients.map(ingredient => {
+            return {
+            dish_id: dish.id,
+            name : ingredient
+            }
+        });
+    }
+      
+    await knex("ingredients").where({ dish_id: dish}).delete()
+    await knex("ingredients").where({ dish_id: dishId}).insert(ingredientsInsert)
+
 
     return response.json({
       message: "Prato atualizado com sucesso"
