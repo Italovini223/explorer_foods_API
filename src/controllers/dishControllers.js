@@ -81,7 +81,7 @@ class DishControllers {
         });
     }
       
-    await knex("ingredients").where({ dish_id: dish}).delete()
+    await knex("ingredients").where({ dish_id: dishId}).delete();
     await knex("ingredients").where({ dish_id: dishId}).insert(ingredientsInsert)
 
 
