@@ -15,7 +15,7 @@ class OrderRoutes {
 
    const dishesInCart = cart.map(dish => {
     return {
-      title: dish.name,
+      title: dish.title,
       quantity: dish.quantity,
       dish_id: dish.id,
       order_id
@@ -49,18 +49,6 @@ class OrderRoutes {
       .innerJoin("orders", "orders.id", "orderDishes.order_id")
       .groupBy("orders.id")
 
-      const orderDishes = await knex("orderDishes")
-      const ordersWithDishes = orders.map(order => {
-        const orderDish = orderDishes.filter(dish => dish.order_id === order.id);
-
-        return {
-          ...order,
-          dishes: orderDish
-        }
-      })
-
-      return response.json(ordersWithDishes);
-
     } else {
       orders =  await knex("orderDishes")
       .select([
@@ -73,19 +61,20 @@ class OrderRoutes {
       ])
       .innerJoin("orders", "orders.id", "orderDishes.order_id")
       .groupBy("orders.id")
-
-      const orderDishes = await knex("orderDishes")
-      const orderWithDishes = orders.map(order => {
-        const orderDish = orderDishes.filter(dish => dish.order_id === order.id);
-
-        return {
-          ...order,
-          itens: orderDish
-        }
-      })
-      
-      return response.json(orderWithDishes)
     }
+
+    const orderDishes = await knex("orderDishes")
+    const orderWithDishes = orders.map(order => {
+      const orderDish = orderDishes.filter(dish => dish.order_id === order.id);
+
+      return {
+        ...order,
+        dishes: orderDish
+      }
+    })
+      
+    return response.json(orderWithDishes)
+    
 
   }
 

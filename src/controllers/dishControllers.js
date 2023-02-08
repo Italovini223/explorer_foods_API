@@ -104,7 +104,10 @@ class DishControllers {
   }
 
   async index(request, response){
-    const dish = await knex("dish");
+    const {name} = request.query;
+    const dish = await knex("dish")
+    .whereLike("name", `%${name}%`)
+    .orderBy("name");
 
     response.json(dish);
   }
@@ -122,7 +125,9 @@ class DishControllers {
   }
 
   async delete(request, response){
-    const {id} = request.body;
+    const {id} = request.params;
+
+    console.log(id);
 
     const dish = await knex("dish").where({id}).first();
 
@@ -134,7 +139,7 @@ class DishControllers {
 
     return response.json({
       message: "Prato deletado com sucesso"
-    })
+    }) 
   }
 }
 
