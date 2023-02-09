@@ -85,7 +85,7 @@
       "post": {
         "tags": ["dish"],
         "summary": "create a new dish",
-        "description": "route where admins can add a new dish",
+        "description": "route where admins can add a new dish. OBS: the user most be an admin",
         "requestBody": {
           "content": {
             "application/json": {
@@ -131,11 +131,13 @@
             "description": "somente administradores tem permissão"
           }
         }
-      },
+      }
+    },
+    "/dish/id": {
       "put": {
         "tags": ["dish"],
         "summary": "update a dish",
-        "description": "route where a admin can update a dish ",
+        "description": "route where a admin can update a dish, OBS: the user most be an admin ",
         "requestBody": {
           "content": {
             "application/json": {
@@ -179,6 +181,174 @@
           },
           "401": {
             "description": "somente administradores tem permissão"
+          }
+        }
+      },
+      "get": {
+        "tags": ["dish"],
+        "summary": "return a specific dish",
+        "description": "This route will return a specific dish",
+        "responses": {
+          "200":{
+            "description": "return the dish "
+          }
+        }
+      }
+    },
+    "/dish?name": {
+      "get":{
+        "tags": ["dish"],
+        "summary": "return all dishes",
+        "description": "return all dishes or a specific dish whose name was passed in the query",
+        "responses": {
+          "200": {}
+        }
+      }
+    },
+    "/dish/delete": {
+      "delete": {
+        "tags":["dish"],
+        "summary": "delete a dish",
+        "description": "delete a specific dish",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  }
+                },
+                "example": {
+                  "id": 15
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "prato deletado com sucesso"
+          },
+          "401": {
+            "description": "somente administradores tem permissão"
+          }
+        }
+      }
+    },
+    "/order/create": {
+      "post": {
+        "tags": ["order"],
+        "summary":"create a order",
+        "description": "route to create a order ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  },
+                  "total": {
+                    "type": "integer"
+                  },
+                  "payMethod": {
+                    "type": "string"
+                  },
+                  "cart": {
+                    "type": "array"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "id": {
+                    "type": "number"
+                  }
+                },
+                "example": {
+                  "status": "pagamento aprovado",
+                  "total": 6594,
+                  "payMethod": "cartao de credito",
+                  "cart": [
+                    {
+                      "name": "suco de maracujá",
+                      "quantity": 2,
+                      "id": 1	
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pedido efetuado com sucesso. Numero do pedido = ${order_id}"
+          }
+        }
+      }
+    },
+    "/order/index": {
+      "get": {
+        "tags":["order"],
+        "summary": "return the orders",
+        "description": "if you are a admin will return all orders or if you are not a admin will return your orders",
+        "responses":{
+          "200": {
+            "description": "return the orders"
+          }
+        }
+      }
+    },
+    "/order/updateStatus": {
+      "patch": {
+        "tags":["order"],
+        "summary": "update the order status",
+        "description": "update the order status, BUT THE USER MUST BE A ADMIN ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": 2,
+                  "status": "entregue"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status do pedido atualizado com sucesso"
+          },
+          "401": {
+            "description": "somente administradores podem atualizar os pedidos"
+          }
+        }
+      }
+    },
+    "/files/:nome_do_arquivo": {
+      "get":{
+        "tags": ["file"],
+        "summary": "return a file",
+        "description": "return the files in uploads folder",
+        "responses": {
+          "200": {
+            "description": "return the file"
           }
         }
       }
