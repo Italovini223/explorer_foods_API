@@ -8,8 +8,6 @@ class UserController {
 
     const checkUserExists = await knex("users").where({email})
 
-    console.log(checkUserExists)
-
     if(checkUserExists.length > 0) {
       throw new appError("Este email já existe, favor cadastrar outro!", 401)
     }
