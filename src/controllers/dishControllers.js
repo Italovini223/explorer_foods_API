@@ -13,8 +13,6 @@ class DishControllers {
 
     const avatar = await diskStorage.saveFile(fileName);
 
-    console.log(ingredients)
-
     const dish_id = await knex("dish").insert({
       name,
       description,
@@ -50,7 +48,7 @@ class DishControllers {
   }
 
   async update(request, response){
-    const {name, description, price, ingredients, category} = request.body;
+    const {name, description, price, ingredients } = request.body;
     const {dishId} = request.params;
 
 
@@ -63,11 +61,10 @@ class DishControllers {
 
     await knex("dish").where({id: dishId}).update(dish);
 
-    const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
     let ingredientsInsert
 
-    if (hasOnlyOneIngredient) {
+    if (ingredients.length === 1) {
       ingredientsInsert = {
         name: ingredients,
         dish_id: dish.id,
