@@ -14,7 +14,6 @@ class DishControllers {
     const avatar = await diskStorage.saveFile(fileName);
 
 
-
     const dish_id = await knex("dish").insert({
       name,
       description,
@@ -58,19 +57,10 @@ class DishControllers {
 
     const dish = await knex("dish").where({id: dishId}).first();
 
-    const avatarFileName = request.file.filename;
-
-    if(dish.avatar){
-      await diskStorage.deleteFile(dish.avatar);
-    }
-
-    const avatar = await diskStorage.saveFile(avatarFileName);
 
     dish.name = name ?? dish.name;
     dish.description = description ?? dish.description;
     dish.price = price * 100 ?? dish.price;
-    dish.category = category ?? dish.category;
-    dish.avatar = avatar ?? dish.avatar;
 
     await knex("dish").where({id: dishId}).update(dish);
 
