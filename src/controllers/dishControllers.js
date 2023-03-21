@@ -13,6 +13,7 @@ class DishControllers {
 
     const avatar = await diskStorage.saveFile(fileName);
 
+    console.log(ingredients)
 
     const dish_id = await knex("dish").insert({
       name,
@@ -22,11 +23,9 @@ class DishControllers {
       avatar
     });
 
-    const hasOnlyOneIngredient = typeof(ingredients) === "string";
-
     let ingredientsInsert
 
-    if (hasOnlyOneIngredient) {
+    if (ingredients.length === 1) {
       ingredientsInsert = {
         name: ingredients,
         dish_id
