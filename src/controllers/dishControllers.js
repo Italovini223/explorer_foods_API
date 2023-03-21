@@ -128,9 +128,7 @@ class DishControllers {
 
   async delete(request, response){
     const {id} = request.params;
-
-    console.log(id);
-
+    
     const dish = await knex("dish").where({id}).first();
 
     if(dish.avatar){
