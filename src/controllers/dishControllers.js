@@ -95,11 +95,23 @@ class DishControllers {
 
   async index(request, response){
     const {name} = request.query;
-    const dish = await knex("dish")
-    .whereLike("name", `%${name}%`)
-    .orderBy("name");
 
-    response.json(dish);
+    let dishes
+
+    const ingredients = await knex("ingredients").whereLike("name", `%${name}%`)
+
+    if(ingredients.length > 0){
+      const dishesId = ingredients.map(ingredient => ingredient.dish_id)
+
+      dishes = await knex("dish").whereIn("id", dishesId).orderBy("name")
+
+    } else {
+      dishes = await knex("dish")
+      .whereLike("name", `%${name}%`)
+      .orderBy("name");
+    }
+
+    return response.json(dishes);
   }
 
   async show(request, response){
