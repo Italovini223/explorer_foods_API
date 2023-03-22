@@ -5,7 +5,7 @@ const diskStorage = new DisKStorage();
 
 class DishControllers {
   async create(request, response){
-    const { name, description, category, price, ingredients } = request.body;
+       const { name, description, category, price, ingredients } = request.body;
 
     const { filename: imageFilename } = request.file;
 
@@ -17,7 +17,7 @@ class DishControllers {
       name,
       description,
       category,
-      price
+      price: price * 100
     });
 
     const hasOnlyOneIngredient = typeof(ingredients) === "string";
