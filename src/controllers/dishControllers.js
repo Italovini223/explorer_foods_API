@@ -5,42 +5,43 @@ const diskStorage = new DisKStorage();
 
 class DishControllers {
   async create(request, response){
-    const {name, description, price, ingredients, category} = request.body
+    const { name, description, category, price, ingredients } = request.body;
 
-    const integerPrice = price * 100;
+    const { filename: imageFilename } = request.file;
 
-    const fileName = request.file.filename;
 
-    const avatar = await diskStorage.saveFile(fileName);
+    const filename = await diskStorage.saveFile(imageFilename);
 
     const dish_id = await knex("dish").insert({
+      avatar: filename,
       name,
       description,
       category,
-      price: integerPrice,
-      avatar
+      price
     });
 
-    let ingredientsInsert
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
-    if (ingredients.length === 1) {
+    let ingredientsInsert
+    if (hasOnlyOneIngredient) {
       ingredientsInsert = {
         name: ingredients,
         dish_id
       }
-    
+
     } else if (ingredients.length > 1) {
-        ingredientsInsert = ingredients.map(ingredient => {
-            return {
-            dish_id,
-            name : ingredient
-            }
-        });
+      ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          name : ingredient,
+          dish_id
+        }
+      });
+
+    } else {
+      return 
     }
 
     await knex("ingredients").insert(ingredientsInsert);
-
-    console.log(ingredients.length);
 
     return response.status(201).json({
       message: "Prato criado com sucesso!"
