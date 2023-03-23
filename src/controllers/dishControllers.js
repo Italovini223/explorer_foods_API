@@ -24,28 +24,28 @@ class DishControllers {
 
     console.log(dish_id);
 
-    // const hasOnlyOneIngredient = typeof(ingredients) === "string";
+    const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
-    // let ingredientsInsert
-    // if (hasOnlyOneIngredient) {
-    //   ingredientsInsert = {
-    //     name: ingredients,
-    //     dish_id
-    //   }
+    let ingredientsInsert
+    if (hasOnlyOneIngredient) {
+      ingredientsInsert = {
+        name: ingredients,
+        dish_id
+      }
 
-    // } else if (ingredients.length > 1) {
-    //   ingredientsInsert = ingredients.map(ingredient => {
-    //     return {
-    //       name : ingredient,
-    //       dish_id
-    //     }
-    //   });
+    } else if (ingredients.length > 1) {
+      ingredientsInsert = ingredients.map(ingredient => {
+        return {
+          name : ingredient,
+          dish_id
+        }
+      });
 
-    // } else {
-    //   return 
-    // }
+    } else {
+      return 
+    }
 
-    // await knex("ingredients").insert(ingredientsInsert);
+    await knex("ingredients").insert(ingredientsInsert);
 
     return response.status(201).json({
       message: "Prato criado com sucesso!"
