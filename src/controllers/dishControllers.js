@@ -43,7 +43,7 @@ class DishControllers {
     //   return 
     // }
 
-    await knex("ingredients").insert(ingredientsInsert);
+    // await knex("ingredients").insert(ingredientsInsert);
 
     return response.status(201).json({
       message: "Prato criado com sucesso!"
