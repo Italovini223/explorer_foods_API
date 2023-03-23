@@ -6,16 +6,18 @@ class OrderRoutes {
     const user_id = request.user.id;
    const {total, payMethod, status, cart} = request.body;
 
-   const order_id = await knex("orders").insert({
+   const data = await knex("orders").insert({
     status,
     payMethod,
     total,
     user_id
    });
 
+   const [order_id] = data;
+
    const dishesInCart = cart.map(dish => {
     return {
-      title: dish.title,
+      title: dish.name,
       quantity: dish.quantity,
       dish_id: dish.id,
       order_id

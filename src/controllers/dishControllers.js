@@ -22,8 +22,6 @@ class DishControllers {
 
     const [dish_id] = data
 
-    console.log(dish_id);
-
     const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
     let ingredientsInsert
