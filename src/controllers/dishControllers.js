@@ -5,7 +5,7 @@ const diskStorage = new DisKStorage();
 
 class DishControllers {
   async create(request, response){
-       const { name, description, category, price, ingredients } = request.body;
+      const { name, description, category, price, ingredients } = request.body;
 
     const { filename: imageFilename } = request.file;
 
@@ -20,26 +20,28 @@ class DishControllers {
       price: price * 100
     });
 
-    const hasOnlyOneIngredient = typeof(ingredients) === "string";
+    console.log(dish_id);
 
-    let ingredientsInsert
-    if (hasOnlyOneIngredient) {
-      ingredientsInsert = {
-        name: ingredients,
-        dish_id
-      }
+    // const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
-    } else if (ingredients.length > 1) {
-      ingredientsInsert = ingredients.map(ingredient => {
-        return {
-          name : ingredient,
-          dish_id
-        }
-      });
+    // let ingredientsInsert
+    // if (hasOnlyOneIngredient) {
+    //   ingredientsInsert = {
+    //     name: ingredients,
+    //     dish_id
+    //   }
 
-    } else {
-      return 
-    }
+    // } else if (ingredients.length > 1) {
+    //   ingredientsInsert = ingredients.map(ingredient => {
+    //     return {
+    //       name : ingredient,
+    //       dish_id
+    //     }
+    //   });
+
+    // } else {
+    //   return 
+    // }
 
     await knex("ingredients").insert(ingredientsInsert);
 
