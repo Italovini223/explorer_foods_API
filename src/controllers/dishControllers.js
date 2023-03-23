@@ -12,13 +12,15 @@ class DishControllers {
 
     const filename = await diskStorage.saveFile(imageFilename);
 
-    const dish_id = await knex("dish").insert({
+    const data = await knex("dish").insert({
       avatar: filename,
       name,
       description,
       category,
       price: price * 100
     });
+
+    const [dish_id] = data
 
     console.log(dish_id);
 
