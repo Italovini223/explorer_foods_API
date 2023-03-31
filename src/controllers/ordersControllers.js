@@ -16,8 +16,9 @@ class OrderRoutes {
    const [order_id] = data;
 
    const dishesInCart = cart.map(dish => {
+    console.log(dish);
     return {
-      title: dish.name,
+      title: dish.title,
       quantity: dish.quantity,
       dish_id: dish.id,
       order_id
